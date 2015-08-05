@@ -8,21 +8,14 @@
 
 #import "XLCycleScrollView.h"
 
+@interface XLCycleScrollView()
+
+@property (nonatomic, retain) NSMutableArray *curViews;
+@property (nonatomic, assign) NSInteger totalPages;
+
+@end
+
 @implementation XLCycleScrollView
-
-@synthesize scrollView = _scrollView;
-@synthesize pageControl = _pageControl;
-@synthesize currentPage = _curPage;
-@synthesize datasource = _datasource;
-@synthesize delegate = _delegate;
-
-- (void)dealloc
-{
-    [_scrollView release];
-    [_pageControl release];
-    [_curViews release];
-    [super dealloc];
-}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -77,7 +70,7 @@
         [subViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     }
     
-    [self getDisplayImagesWithCurpage:_curPage];
+    [self getDisplayImagesWithCurpage:(int)_curPage];
     
     for (int i = 0; i < 3; i++) {
         UIView *v = [_curViews objectAtIndex:i];
@@ -85,7 +78,6 @@
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                     action:@selector(handleTap:)];
         [v addGestureRecognizer:singleTap];
-        [singleTap release];
         v.frame = CGRectOffset(v.frame, v.frame.size.width * i, 0);
         [_scrollView addSubview:v];
     }
@@ -114,7 +106,7 @@
     if(value == -1) value = _totalPages - 1;
     if(value == _totalPages) value = 0;
     
-    return value;
+    return (int)value;
     
 }
 
@@ -136,7 +128,6 @@
             UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                         action:@selector(handleTap:)];
             [v addGestureRecognizer:singleTap];
-            [singleTap release];
             v.frame = CGRectOffset(v.frame, v.frame.size.width * i, 0);
             [_scrollView addSubview:v];
         }
